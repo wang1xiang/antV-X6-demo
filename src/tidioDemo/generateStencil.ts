@@ -2,29 +2,39 @@ import { ports } from "./registerNode";
 import { InfoCircleTwoTone } from "@ant-design/icons";
 const generateStencil = (graph, stencil) => {
   const r6 = graph.createNode({
-    shape: "custom-circle",
-    label: "连接",
+    shape: "custom-rect",
+    label: "首次访问",
+    width: 60,
+    height: 60,
     data: {
-      type: 'action',
-      title: 'ceshititle',
-      tooltip: 'ceshitooltip',
-      content: 'hello, nihao',
-      answer: [
-        '这是第一条测试',
-        '这是第二条测试',
-        '这是第三条测试',
-      ],
+      type: 'trigger',
+      triggerType: '',
       footerIcon: InfoCircleTwoTone,
       footerContent: '这是footer'
     }
   });
-  stencil.load([r6], "group1");
+  const r7 = graph.createNode({
+    shape: "custom-rect",
+    label: "鼠标离开窗口",
+    width: 60,
+    height: 60,
+    data: {
+      type: 'trigger',
+      triggerType: '',
+      title: '鼠标离开窗口',
+      tooltip: '鼠标离开窗口时触发',
+      footerIcon: InfoCircleTwoTone,
+      footerContent: '这是footer'
+    }
+  });
+  stencil.load([r6, r7], "group1");
 
   const imageShapes = [
     {
-      label: "Client",
+      label: "System",
       image:
-        "https://gw.alipayobjects.com/zos/bmw-prod/687b6cb9-4b97-42a6-96d0-34b3099133ac.svg",
+        "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSI0OCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz4KICAgIDxwYXRoIGQ9Ik00IDZoMThWNEg0Yy0xLjEgMC0yIC45LTIgMnYxMUgwdjNoMTR2LTNINFY2em0xOSAyaC02Yy0uNTUgMC0xIC40NS0xIDF2MTBjMCAuNTUuNDUgMSAxIDFoNmMuNTUgMCAxLS40NSAxLTFWOWMwLS41NS0uNDUtMS0xLTF6bS0xIDloLTR2LTdoNHY3eiIvPgo8L3N2Zz4=",
+      data: {}
     },
     {
       label: "Http",
@@ -56,6 +66,21 @@ const generateStencil = (graph, stencil) => {
     graph.createNode({
       shape: "custom-image",
       label: item.label,
+      width: 60,
+      height: 60,
+      data: {
+        type: 'condition',
+        title: '操作系统',
+        tooltip: '用来判断操作系统版本',
+        content: '',
+        answer: ['Yes', 'No'],
+        footerIcon: InfoCircleTwoTone,
+        footerContent: '判断客户需求',
+        condition: {
+          type: '',
+          value: ''
+        }
+      },
       attrs: {
         image: {
           "xlink:href": item.image,
@@ -67,15 +92,31 @@ const generateStencil = (graph, stencil) => {
 
   const htmlNode = [
     {
-      label: "html",
+      title: '快捷回复',
+      tooltip: '设置答复供使用者选择',
+      content: '欢迎来到我的小店',
+      answer: [
+        '随便逛逛',
+        '推荐给我',
+        '哈哈',
+      ],
     },
+    {
+      title: '文字信息',
+      tooltip: '直接发送给访问者的信息',
+      content: '',
+      answer: [
+        '期待您的下次光临',
+        '哈哈',
+      ],
+    }
   ];
-  const htmlNodes = htmlNode.map((item) =>
+  const htmlNodes = htmlNode.map(({title, tooltip, content, answer}) =>
     graph.createNode({
       shape: "html",
       html: "my-html",
-      width: 45,
-      height: 45,
+      width: 60,
+      height: 60,
       attrs: {
         text: {
           fontSize: 12,
@@ -84,20 +125,17 @@ const generateStencil = (graph, stencil) => {
       },
       data: {
         type: 'action',
-        title: 'ceshititle',
-        tooltip: 'ceshitooltip',
-        content: 'hello, nihao',
-        answer: [
-          '这是第一条测试',
-          '这是第二条测试',
-          '这是第三条测试',
-        ],
+        title,
+        tooltip,
+        content,
+        answer,
         footerIcon: InfoCircleTwoTone,
         footerContent: '这是footer'
       },
       // html节点添加ports
       ports: { ...ports },
-    })
+    }),
+    
   );
 
   stencil.load(htmlNodes, "group3");

@@ -1,8 +1,10 @@
-import React, { FC, useState, useRef } from 'react'
-import { Drawer, Tooltip, Input, Tag } from 'antd';
-import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import React, { FC } from 'react'
+import { Drawer, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons'
 import Icon from '@ant-design/icons';
-
+import ConditionContent from './ConditionContent';
+import TriggerContent from './TriggerContent';
+import ActionContent from './ActionContent';
 interface IProps {
   selectedNode: any;
   drawerVisible: boolean
@@ -27,42 +29,16 @@ const NodeContent: FC<IProps> = ({ drawerVisible, setDrawerVisible, selectedNode
       <Icon component={data.footerIcon} />{data.footerContent}
     </>
   }
+  const NodeContent = () => {
+    const { data } = selectedNode;
+    const comType = {
+      trigger: <TriggerContent selectedNode={selectedNode}/>,
+      condition: <ConditionContent selectedNode={selectedNode}/>,
+      action: <ActionContent selectedNode={selectedNode} drawerVisible={drawerVisible} />
+    }
+    return comType[data.type];
+  }
 
-  const handleRemove = removedTag => {
-    const { data } = selectedNode;
-    data.answer = data.answer.filter(tag => tag !== removedTag);
-  }
-  const [inputVisible , setInputVisible] = useState(false);
-  const refInput = useRef(null);
-  const handleInputConfirm = () => {
-    const { data } = selectedNode;
-    data.answer.push(refInput.current.state.value);
-    setInputVisible(false);
-  };
-  const DrawerContent = () => {
-    const { data } = selectedNode;
-    const tag = data.answer.map(ans => <Tag key={ans} closable onClose={() => handleRemove(ans)} color="cyan">{ans}</Tag>)
-    return (
-      <>
-      {tag}
-      {inputVisible && (
-        <Input
-          ref={refInput}
-          type="text"
-          size="small"
-          onBlur={() => handleInputConfirm()}
-          onPressEnter={() => handleInputConfirm()}
-        />
-      )}
-      {!inputVisible && (
-        <Tag className="site-tag-plus" color="cyan" onClick={() => setInputVisible(true)}>
-          <PlusOutlined /> New Tag
-        </Tag>
-      )}
-      </>
-    )
-  }
-  
   const handleClose = () => {
     setDrawerVisible(false);
     graph.cleanSelection();
@@ -79,7 +55,7 @@ const NodeContent: FC<IProps> = ({ drawerVisible, setDrawerVisible, selectedNode
       >
         
         <div className="drawer-content">
-          <DrawerContent />
+          <NodeContent />
         </div>
         <div className="drawer-footer"><DrawerFooter /></div>
       </Drawer>

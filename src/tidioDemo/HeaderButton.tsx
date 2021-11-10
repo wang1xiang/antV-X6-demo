@@ -61,8 +61,8 @@ const HeaderButton: FC<IProps> = ({ graph, editState, changeEditState }) => {
       const dagreLayout = new DagreLayout({
         type: "dagre",
         rankdir: "TB",
-        ranksep: 30,
-        nodesep: 50,
+        ranksep: 50,
+        nodesep: 60,
       });
       const { cells } = graph.toJSON();
 

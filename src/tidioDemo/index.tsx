@@ -52,7 +52,7 @@ const Flow = () => {
         connectionPoint: "anchor",
         allowBlank: false,
         snap: {
-          radius: 20,
+          radius: 40, // 自动吸附
         },
         createEdge() {
           return new Shape.Edge({
@@ -109,18 +109,18 @@ const Flow = () => {
     });
     // #region 初始化 stencil
     const stencil = new Addon.Stencil({
-      title: "流程图",
+      title: "tu ",
       target: graph,
       stencilGraphWidth: 200,
       stencilGraphHeight: 180,
       collapsable: true,
       groups: [
         {
-          title: "基础流程图",
+          title: "Tiggers",
           name: "group1",
         },
         {
-          title: "系统设计图",
+          title: "Conditions",
           name: "group2",
           graphHeight: 250,
           layoutOptions: {
@@ -128,7 +128,7 @@ const Flow = () => {
           },
         },
         {
-          title: "自定义节点",
+          title: "Actions",
           name: "group3",
           graphHeight: 250,
           layoutOptions: {
