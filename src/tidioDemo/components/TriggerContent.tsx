@@ -5,7 +5,6 @@ interface IProps {
 }
 const { Option } = Select;
 const TriggerContent: FC<IProps> = ({ selectedNode }) => {
-  console.log(selectedNode.data);
   return (
     <Input.Group compact>
       <Input style={{ width: '30%' }} defaultValue="触发条件" />

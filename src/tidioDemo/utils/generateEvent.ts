@@ -1,4 +1,5 @@
-const generateEditEvent = (graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible) => {
+// 注册事件、包含节点、边
+const generateEvent = (graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible) => {
   // 控制连接桩显示/隐藏
   const showPorts = (ports: NodeListOf<SVGElement>, show: boolean) => {
     for (let i = 0, len = ports.length; i < len; i = i + 1) {
@@ -26,6 +27,8 @@ const generateEditEvent = (graph, refContainer, setSelectedEdge, setSelectedNode
   });
   // 边添加完成后选择
   graph.on('edge:connected', ({ isNew, edge }) => {
+    console.log(edge.getSourceNode())
+    // 如果有线段时 通过vertices可以调整
     if (isNew && edge.getSourceNode().data.type !== 'trigger') {
       setSelectedEdge(edge);
     }
@@ -130,4 +133,4 @@ const generateEditEvent = (graph, refContainer, setSelectedEdge, setSelectedNode
     cell.removeTools();
   })
 };
-export default generateEditEvent;
+export default generateEvent;

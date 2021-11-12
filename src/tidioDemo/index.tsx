@@ -1,20 +1,20 @@
 import { useRef, useEffect, useState } from "react";
-// import insertCss from "insert-css";
-import { Graph, Shape, Addon } from "@antv/x6";
-import HeaderButton from './HeaderButton';
-import NodeContent from './NodeContent';
-import RenameEdge from './RenameEdge';
-import registerNode from "./registerNode";
-import generateBindKey from "./generateBindKey";
-import generateEvent from "./generateEvent";
-import generateEditEvent from "./generateEditEvent";
-import generateStencil from "./generateStencil";
+import { Graph, Shape } from "@antv/x6";
+
+import HeaderButton from './components/HeaderButton';
+import Stencil from "./components/Stencil";
+import NodeContent from './components/NodeContent';
+import GenerateEdgeLabel from './components/GenerateEdgeLabel';
+
+import registerNode from "./utils/generateNode";
+import generateBindKey from "./utils/generateBindKey";
+import clearEvent from "./utils/clearEvent";
+import generateEvent from "./utils/generateEvent";
 
 import "./index.less";
 
 const Flow = () => {
   const refContainer = useRef(null);
-  const refStencil = useRef(null);
 
   const [graph , setGraph] = useState<any>({});
   // 为了协助代码演示
@@ -107,46 +107,10 @@ const Flow = () => {
       keyboard: true,
       clipboard: true,
     });
-    // #region 初始化 stencil
-    const stencil = new Addon.Stencil({
-      title: "tu ",
-      target: graph,
-      stencilGraphWidth: 200,
-      stencilGraphHeight: 180,
-      collapsable: true,
-      groups: [
-        {
-          title: "Tiggers",
-          name: "group1",
-        },
-        {
-          title: "Conditions",
-          name: "group2",
-          graphHeight: 250,
-          layoutOptions: {
-            rowHeight: 70,
-          },
-        },
-        {
-          title: "Actions",
-          name: "group3",
-          graphHeight: 250,
-          layoutOptions: {
-            rowHeight: 70,
-          },
-        },
-      ],
-      layoutOptions: {
-        columns: 2,
-        columnWidth: 80,
-        rowHeight: 55,
-      },
-    });
-    refStencil.current!.appendChild(stencil.container);
+    
     generateBindKey(graph);
-    generateEditEvent(graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible);
+    generateEvent(graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible);
     registerNode();
-    generateStencil(graph, stencil);
     setGraph(graph);
     return graph;
   };
@@ -174,18 +138,18 @@ const Flow = () => {
   const changeEditState = (state) => {
     // 切换编辑状态时切换自定义事件
     if (state) {
-      generateEditEvent(graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible);
+      generateEvent(graph, refContainer, setSelectedEdge, setSelectedNode, setDrawerVisible);
     } else {
-      generateEvent(graph, refContainer);
+      clearEvent(graph);
     }
     setEditState(state);
   }
   return (
     <>
       <HeaderButton graph={graph} editState={editState} changeEditState={changeEditState}/>
-      <RenameEdge selectedEdge={selectedEdge} changeEdge={changeEdge}/>
+      <GenerateEdgeLabel selectedEdge={selectedEdge} changeEdge={changeEdge}/>
       <div className="container">
-        <div className="stencil" ref={refStencil}></div>
+        <Stencil graph={graph}/>
         <div className="graph-container" ref={refContainer}>
         <NodeContent drawerVisible={drawerVisible} setDrawerVisible={setDrawerVisible} selectedNode={selectedNode} changeNode={changeNode} graph={graph}/>
         </div>

@@ -1,6 +1,5 @@
+// 快捷键与事件
 const generateBindKey = (graph) => {
-    
-  // #region 快捷键与事件
   // copy cut paste
   graph.bindKey(["meta+c", "ctrl+c"], () => {
     const cells = graph.getSelectedCells();

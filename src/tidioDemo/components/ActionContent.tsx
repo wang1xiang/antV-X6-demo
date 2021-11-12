@@ -2,7 +2,6 @@ import React, { FC, useState, useRef, useEffect } from 'react'
 import { Input, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'
 const { TextArea } = Input;
-
 interface IProps {
   selectedNode: any
   drawerVisible: boolean
